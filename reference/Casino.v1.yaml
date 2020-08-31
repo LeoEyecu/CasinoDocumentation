@@ -10,6 +10,7 @@ paths:
       summary: User authentication
       tags:
         - User
+        - Non-seamless
       responses:
         '200':
           description: Login success
@@ -23,8 +24,7 @@ paths:
               examples:
                 Login success:
                   value:
-                    token: >-
-                      eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vdGVzdGluZy5sdWNreS1zdHJpa2UuY2x1Yi9hcGkvbG9naW4iLCJpYXQiOjE1OTY1MzcwNDQsImV4cCI6MTU5NjU0MDY0NCwibmJmIjoxNTk2NTM3MDQ0LCJqdGkiOiIyS0V2RXVMckM3bTY2aW9VSURvME1kdEtHckkxT3FmaTBXdVJwOHVWIiwic3ViIjo2NywicHJ2IjoiM2VmNmNmODlmNTU5YTkyYjNlYjdiNzdiOGM3MmRiMzlkNDdlZGI2MCJ9.XaTpLVWTJaSCfT93I8AKACdMGNfGAjAyu3oAHFyoVW4
+                    token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vdGVzdGluZy5sdWNreS1zdHJpa2UuY2x1Yi9hcGkvbG9naW4iLCJpYXQiOjE1OTY1MzcwNDQsImV4cCI6MTU5NjU0MDY0NCwibmJmIjoxNTk2NTM3MDQ0LCJqdGkiOiIyS0V2RXVMckM3bTY2aW9VSURvME1kdEtHckkxT3FmaTBXdVJwOHVWIiwic3ViIjo2NywicHJ2IjoiM2VmNmNmODlmNTU5YTkyYjNlYjdiNzdiOGM3MmRiMzlkNDdlZGI2MCJ9.XaTpLVWTJaSCfT93I8AKACdMGNfGAjAyu3oAHFyoVW4
         '401':
           description: Unauthorized
           content:
@@ -74,3 +74,6 @@ paths:
     parameters: []
 components:
   schemas: {}
+tags:
+  - name: User
+  - name: Non-seamless
