@@ -73,11 +73,87 @@ paths:
     parameters: []
   /api/me:
     get:
-      summary: Your GET endpoint
+      summary: Get profile information of the user
       tags:
-        - Session
-      responses: {}
+        - User
+      responses:
+        '200':
+          description: User fetch success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  phone:
+                    type: string
+                  balance:
+                    type: string
+                  avatar:
+                    type: string
+                  address:
+                    type: string
+                  country_id:
+                    type: integer
+                  role_id:
+                    type: integer
+                  status:
+                    type: string
+                  birthday:
+                    type: string
+                  last_login:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+              examples:
+                User informations:
+                  value:
+                    id: 67
+                    first_name: "null"
+                    last_name: "null"
+                    username: '570358599'
+                    phone: "null"
+                    balance: '200.0000'
+                    avatar: 'http://website.com/back/img/profile.png'
+                    address: "null"
+                    country_id: 1
+                    role_id: 1
+                    status: Active
+                    birthday: "null"
+                    last_login: ''
+                    created_at: '2020-08-02 14:21:15'
+                    updated_at: '2020-08-02 14:21:15'
+        '401':
+          description: Unauthorized
       operationId: get-api-me
+      description: Get the user information of a logged users (after login success)
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: API Key of the Shop
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: shop_id
+          description: Shop ID
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: 'Authorization: Bearer'
+          required: true
+          description: User Token (provided by /api/login)
+    parameters: []
   /api/me/details:
     get:
       summary: Your GET endpoint
