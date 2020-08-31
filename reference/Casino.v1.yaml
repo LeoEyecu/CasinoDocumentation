@@ -8,9 +8,6 @@ paths:
   /api/login:
     post:
       summary: User authentication
-      tags:
-        - User
-        - Non-seamless
       responses:
         '200':
           description: Login success
@@ -71,9 +68,10 @@ paths:
           name: shop_id
           description: Shop ID
           required: true
+      tags:
+        - Users Management
     parameters: []
 components:
   schemas: {}
 tags:
-  - name: User
-  - name: Non-seamless
+  - name: Users Management
