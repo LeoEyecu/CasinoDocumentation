@@ -68,10 +68,7 @@ paths:
           name: shop_id
           description: Shop ID
           required: true
-      tags:
-        - User
     parameters: []
 components:
   schemas: {}
-tags:
-  - name: User
+tags: []
