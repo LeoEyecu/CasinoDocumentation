@@ -74,19 +74,22 @@ paths:
   /api/me:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - Session
       responses: {}
       operationId: get-api-me
   /api/me/details:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - Session
       responses: {}
       operationId: get-api-me-details
   /api/me/details/auth:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - Session
       responses: {}
       operationId: get-api-me-details-auth
   /api/me/avatar:
@@ -96,6 +99,8 @@ paths:
       responses:
         '200':
           description: OK
+      tags:
+        - Session
     delete:
       summary: ''
       operationId: delete-api-me-avatar
@@ -105,19 +110,22 @@ paths:
   /me/avatar/external:
     put:
       summary: Your PUT endpoint
-      tags: []
+      tags:
+        - Session
       responses: {}
       operationId: put-me-avatar-external
   /api/me/sessions:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - Session
       responses: {}
       operationId: get-api-me-sessions
   /api/me/return:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - Session
       responses: {}
       operationId: get-api-me-return
 components:
