@@ -7,7 +7,7 @@ servers:
 paths:
   /api/login:
     post:
-      summary: (NS) User authentication
+      summary: User authentication
       responses:
         '200':
           description: Login success
@@ -68,7 +68,59 @@ paths:
           name: shop_id
           description: Shop ID
           required: true
+      tags:
+        - Session
     parameters: []
+  /api/me:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-api-me
+  /api/me/details:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-api-me-details
+  /api/me/details/auth:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-api-me-details-auth
+  /api/me/avatar:
+    put:
+      summary: ''
+      operationId: put-api-me-avatar
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: ''
+      operationId: delete-api-me-avatar
+      responses:
+        '200':
+          description: OK
+  /me/avatar/external:
+    put:
+      summary: Your PUT endpoint
+      tags: []
+      responses: {}
+      operationId: put-me-avatar-external
+  /api/me/sessions:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-api-me-sessions
+  /api/me/return:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-api-me-return
 components:
   schemas: {}
-tags: []
+tags:
+  - name: Session
