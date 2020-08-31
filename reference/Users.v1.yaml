@@ -68,7 +68,10 @@ paths:
           name: shop_id
           description: Shop ID
           required: true
+      tags:
+        - Session
     parameters: []
 components:
   schemas: {}
-tags: []
+tags:
+  - name: Session
