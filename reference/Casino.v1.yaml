@@ -69,9 +69,9 @@ paths:
           description: Shop ID
           required: true
       tags:
-        - Users Management
+        - User
     parameters: []
 components:
   schemas: {}
 tags:
-  - name: Users Management
+  - name: User
