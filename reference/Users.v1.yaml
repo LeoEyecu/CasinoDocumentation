@@ -7,7 +7,7 @@ servers:
 paths:
   /api/login:
     post:
-      summary: (NS) User authentication
+      summary: User authentication
       responses:
         '200':
           description: Login success
