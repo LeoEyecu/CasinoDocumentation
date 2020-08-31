@@ -73,7 +73,7 @@ paths:
     parameters: []
   /api/me:
     get:
-      summary: Get profile of the logged user
+      summary: Get user information
       responses:
         '200':
           description: User fetch success
