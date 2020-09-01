@@ -67,7 +67,7 @@ servers:
   - url: 'https://games.eyecu.digital'
     description: EyeCu Games Servers
 paths:
-  '/launcher/{game}/s{shop_id}@{seamless_token}/{mode}':
+  '/launcher/{game}/s:{shop_id}@{seamless_token}/{mode}':
     parameters:
       - schema:
           type: string
