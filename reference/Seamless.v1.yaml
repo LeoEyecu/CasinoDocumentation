@@ -4,7 +4,7 @@ info:
   version: '1.0'
   contact:
     name: Eyecu.Digital
-  description: |-
+  description: |+
     ## Presentation of the Seamless
 
     In this article we will see how the seamless flow is working.
@@ -25,6 +25,11 @@ info:
     | gameLog |   NO    |   Send a log of the game played (game id, user id, ip etc) |
     | jackpotUpdate |   NO    |  Send a jackpot update for the player |
     | gameError |   NO    |   Send an error log if the game have any problem |
+
+    ### Generate a Seamless token
+
+    To generate a valid user Token, you will have to provide 2 things :
+
 servers:
   - url: 'https://games.eyecu.digital'
     description: EyeCu Games Servers
@@ -133,6 +138,112 @@ paths:
           "balance": 125.25
         }
         \```
+  /event/updateBalance:
+    get:
+      summary: updateBalance
+      tags:
+        - Events
+      responses:
+        '200':
+          description: OK
+      operationId: get-event-updateBalance
+      description: |-
+        <!-- theme: info -->
+        > #### This is not an endpoint
+
+        This event is use to update the balance of the user, this event is called in the games :
+
+        When a spin is roll
+
+        Request example to your seamless api :
+
+        https://www.casino.pro/seamless?shop_id=1&user_id=1&event=updateBalance&request_time=1598347737744&balance=125.25
+
+        | Param |      Description |
+        | ------------- | :-----------: | -----: |
+        | shop_id | Your Shop ID |
+        | user_id |  Your User ID |
+        | event |  **updateBalance** |
+        | request_time |  UNIX Timestamp (ms) when the request has been sent |
+        | balance |  **The new balance amount** |
+
+        This request don't need any answer
+  /event/gameStats:
+    get:
+      summary: gameStats
+      tags:
+        - Events
+      responses: {}
+      operationId: get-event-gameStats
+      description: "<!-- theme: info -->\n> #### This is not an endpoint\n\nThis event allow you to record a game roll. It will give you information about the roll done by the user\n\nRequest example to your seamless api :\n\nhttps://www.casino.pro/seamless?shop_id=1&user_id=1&event=gameStats&request_time=1598347737744&balance=125.5&bet=10&win=0&game=LuckyKenoPP&percent=0&percent_jps=0&percent_jpg=0&profit=1\n\n| Param |      Description |\n| ------------- | :-----------: | -----: |\n| shop_id | Your Shop ID |\n| user_id |  Your User ID |\n| event |  **getStats** |\n| request_time |  UNIX Timestamp (ms) when the request has been sent |\n| balance | The new balance amount |\n| bet | The amount of the bet done by the user |\n| win |  \tThe amount win by the user |\n| game | Game name played |\n| percent | Total amount saved in the bank to be return the the player (RTP adjustmement) |\n| percent_jps | Total amount save in the Slot Jackpot |\n| percent_jpg | Total amount save in the Game Jackpot |\n| profit |  Total profit make for this roll (shop profit) |\n\nThis request don't need any answer"
+  /event/gameLog:
+    get:
+      summary: gameLog
+      tags:
+        - Events
+      responses: {}
+      operationId: get-event-gameLog
+      parameters: []
+      description: |-
+        <!-- theme: info -->
+        > #### This is not an endpoint
+
+        This event allow you to record a game log. This game log is usefull if you want to keep a trace of the roll played (with the IP of the client)
+
+        Request example to your seamless api :
+
+        https://www.casino.pro/seamless?shop_id=1&user_id=1&event=gameStats&request_time=1598347737744&ip=0.0.0.0&game_id=25
+
+        | Param |      Description |
+        | ------------- | :-----------: | -----: |
+        | shop_id | Your Shop ID |
+        | user_id |  Your User ID |
+        | event |  **gameLog** |
+        | request_time |  UNIX Timestamp (ms) when the request has been sent |
+        | ip | IP of the client who have played the game |
+        | game_id | The Game ID Played |
+
+        This request don't need any answer
+  /event/updateJackpot:
+    get:
+      summary: updateJackpots
+      tags: []
+      responses: {}
+      operationId: get-event-updateJackpot
+      description: |-
+        <!-- theme: info -->
+        > #### This is not an endpoint
+
+        This event is usefull if you want to get event about the jackpot update for a roll
+
+        Everytime a roll starts, you will receive a jackpot event (if it's needed)
+
+        Request example to your seamless api :
+
+        https://www.casino.pro/seamless?shop_id=1&user_id=1&event=updateJackpot&request_time=1598347737744&balance=125.5&win=10&game=LuckyKenoPP%20JPG%201
+
+        | Param |      Description |
+        | ------------- | :-----------: | -----: |
+        | shop_id | Your Shop ID |
+        | user_id |  Your User ID |
+        | event |  **updateJackpot** |
+        | request_time |  UNIX Timestamp (ms) when the request has been sent |
+        | balance | The new balance of the user |
+        | win | Jackpot amount added |
+        | game | Jackpot name (Ex : LuckyKenoPP JPG 1) |
+
+        This request don't need any answer
+
+        <!-- theme: info -->
+        > #### This request also provide some extra parameters (bet, percent, percent_jps, percent_jpg, profit), but all these parameters will be 0, always.
+  /event/gameError:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Events
+      responses: {}
+      operationId: get-event-gameError
+      description: "<!-- theme: info -->\n> #### This is not an endpoint\n\nThis event is usefull if you want to know if a game have any error\n\nRequest example to your seamless api :\n\nhttps://www.casino.pro/seamless?shop_id=1&user_id=1&event=updateJackpot&request_time=1598347737744&responseEvent=error&responseType=ERROR&serverResponse=InternalError\n\n\n| Param |      Description |\n| ------------- | :-----------: | -----: |\n| shop_id | Your Shop ID |\n| user_id |  Your User ID |\n| event |  **gameError** |\n| request_time |  UNIX Timestamp (ms) when the request has been sent |\n| responseEvent | \t\"error\" |\n| responseType | **Error description** |\n| serverResponse | \"InternalError\" |\n\nThis request don't need any answer\n\n<!-- theme: info -->\n> #### responseEvent will be always \"error\" & serverResponse will be always \"InternalError\""
 components:
   schemas: {}
 tags:
