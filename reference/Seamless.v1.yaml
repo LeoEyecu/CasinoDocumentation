@@ -1,9 +1,30 @@
 openapi: 3.0.0
 info:
-  title: Seamless.v1
+  title: Seamless
   version: '1.0'
   contact:
     name: Eyecu.Digital
+  description: |-
+    ## Presentation of the Seamless
+
+    In this article we will see how the seamless flow is working.
+
+    You will have to give us an endpoint from your system (GET Endpoint). This endpoint need to be always available, otherwise the games will not work.
+
+    Let's take an example, as your endpoint will be : https://www.casino.pro/seamless
+
+
+    ### Events list
+    <!-- title: Events list -->
+
+    | Event Name |      Require answer |   Description |
+    | ------------- | :-----------: | -----: |
+    | getBalance      | YES | Retrive the balance of the user |
+    | updateBalance      |   NO |   Update the balance of the user |
+    | gameStats |   NO    |   Send a round statistic (bet, win, profit etc) |
+    | gameLog |   NO    |   Send a log of the game played (game id, user id, ip etc) |
+    | jackpotUpdate |   NO    |  Send a jackpot update for the player |
+    | gameError |   NO    |   Send an error log if the game have any problem |
 servers:
   - url: 'https://games.eyecu.digital'
     description: EyeCu Games Servers
@@ -63,37 +84,56 @@ paths:
         If you don't provide the lobby url, it will take by default the lobby_url enter in your shop admin configuration (default lobby url).
 
         If you pass the lobby url in the api when you start a game, it will prioritize it.
-  /Presentation:
+  /event/getBalance:
     get:
-      summary: Presentation of the Seamless
-      tags: []
+      summary: getBalance
+      tags:
+        - Events
       responses:
         '200':
           description: OK
-      operationId: get-Presentation
+      operationId: get-event-getBalance
       description: |-
         <!-- theme: info -->
         > #### This is not an endpoint
 
-        ## Presentation of the Seamless
+        This event is used to get the current balance of the user, this event is called inside the games in the next events:
 
-        In this article we will see how the seamless flow is working.
+        When the game is started
 
-        You will have to give us an endpoint from your system (GET Endpoint). This endpoint need to be always available, otherwise the games will not work.
+        Every 5 seconds (depend's on the game)
 
-        Let's take an example, as your endpoint will be : https://www.casino.pro/seamless
+        Before a spin
 
+        After a spin
 
-        ### Events list
-        <!-- title: Events list -->
+        Request example to your seamless api :
 
-        | Event Name |      Require answer |   Description |
+        https://www.casino.pro/seamless?shop_id=1&user_id=1&event=getBalance&request_time=1598347737744
+
+        | Param |      Description |
         | ------------- | :-----------: | -----: |
-        | getBalance      | YES | Retrive the balance of the user |
-        | updateBalance      |   NO |   Update the balance of the user |
-        | gameStats |   NO    |   Send a round statistic (bet, win, profit etc) |
-        | gameLog |   NO    |   Send a log of the game played (game id, user id, ip etc) |
-        | jackpotUpdate |   NO    |  Send a jackpot update for the player |
-        | gameError |   NO    |   Send an error log if the game have any problem |
+        | shop_id | Your Shop ID |
+        | user_id |  Your User ID |
+        | event |  getBalance |
+        | request_time |  UNIX Timestamp (ms) when the request has been sent |
+
+        This request expects a JSON response.
+
+        | Param | Type | Example | Description
+        | -------- | --------- | ------- | ------- |
+        | user_id | STRING | "1" | User ID of the asked balance |
+        | balance | FLOAT | 125.25 | Amount of the user balance |
+
+        Example :
+
+        \```json
+        {
+          "user_id": "1",
+          "balance": 125.25
+        }
+        \```
 components:
   schemas: {}
+tags:
+  - name: Events
