@@ -72,6 +72,9 @@ paths:
           description: OK
       operationId: get-Presentation
       description: |-
+        <!-- theme: info -->
+        > #### This is not an endpoint
+
         ## Presentation of the Seamless
 
         In this article we will see how the seamless flow is working.
