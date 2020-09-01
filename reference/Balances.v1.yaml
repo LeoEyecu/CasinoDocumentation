@@ -176,7 +176,7 @@ paths:
         - Direct funds management
   '/api/balances/deposits/{userid}':
     get:
-      summary: Your GET endpoint
+      summary: List deposits for a user
       tags:
         - Deposits
       responses:
@@ -279,6 +279,21 @@ paths:
         /!\ NEED 'balances.deposits.manage' PERMISSIONS WITH THE JWT AUTH PROVIDED /!\
       security:
         - JWT Token: []
+      parameters:
+        - schema:
+            type: string
+            example: '8'
+          in: query
+          name: shop_id
+          description: Shop ID
+          required: true
+        - schema:
+            type: string
+            example: h40g8erf4d0807hge80fdsc
+          in: query
+          name: key
+          description: API Key
+          required: true
     parameters:
       - schema:
           type: string
@@ -353,6 +368,206 @@ paths:
                   description: '1 => Approved, 0 => In pending, -1 => Declined. If not provided => default 0'
                   default: 0
         description: ''
+      parameters:
+        - schema:
+            type: string
+            example: '8'
+          in: query
+          name: shop_id
+          description: Shop ID
+          required: true
+        - schema:
+            type: string
+            example: 408kjtyhrgvfdsc708bfdv
+          in: query
+          name: key
+          description: API Key
+          required: true
+  /api/balances/deposits:
+    get:
+      summary: List all deposits
+      tags:
+        - Deposits
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ref:
+                      type: string
+                      example: D408798078
+                      description: Reference of the deposit
+                    shop_id:
+                      type: integer
+                      example: 8
+                      description: Shop ID
+                    user_id:
+                      type: integer
+                      example: 141
+                      description: User ID
+                    source:
+                      type: string
+                      example: Paypal
+                      description: Deposit source (payment provider)
+                    source_infos:
+                      type: string
+                      example: 'Paypal ref : JHYTG048967807HRTFD'
+                      description: Source infos (Payment provided extra infos)
+                    currency:
+                      type: string
+                      example: USD
+                      description: Currency of the deposit
+                    amount:
+                      type: string
+                      example: '20.00'
+                      description: Amount of the deposit made
+                    fees:
+                      type: string
+                      example: '1.00'
+                      description: Fees taken
+                    funded:
+                      type: string
+                      example: '19.00'
+                      description: Amount funded to the user
+                    funded_currency:
+                      type: string
+                      example: USD
+                      description: Funded currency
+                    convert_rate:
+                      type: string
+                      example: '1'
+                      description: Convert rate between currency of the payment & currency funded
+                    admin_id:
+                      type: string
+                      example: '5'
+                      description: Admin ID who changed the payment status
+                    created_at:
+                      type: string
+                      example: '2020-05-01 15:30:25'
+                      description: Deposit creation date
+                    updated_at:
+                      type: string
+                      example: '2020-05-02 12:25:25'
+                      description: Deposit last update
+                    status:
+                      type: integer
+                      example: 1
+                      description: 'Status of the payment (1 => Approved, 0 => Pending, -1 => Declined)'
+                    status_text:
+                      type: string
+                      example: Approved
+                      description: 'Status text associate (Approved, Pending, Declined)'
+              examples:
+                Deposits list:
+                  value:
+                    - ref: D408798078
+                      shop_id: 8
+                      user_id: 141
+                      source: Paypal
+                      source_infos: 'Paypal ref : JHYTG048967807HRTFD'
+                      currency: USD
+                      amount: '20.00'
+                      fees: '1.00'
+                      funded: '19.00'
+                      funded_currency: USD
+                      convert_rate: '1'
+                      admin_id: '5'
+                      created_at: '2020-05-01 15:30:25'
+                      updated_at: '2020-05-02 12:25:25'
+                      status: 1
+                      status_text: Approved
+                    - ref: D408798078
+                      shop_id: 8
+                      user_id: 141
+                      source: Paypal
+                      source_infos: 'Paypal ref : JHYTG048967807HRTFD'
+                      currency: USD
+                      amount: '20.00'
+                      fees: '1.00'
+                      funded: '19.00'
+                      funded_currency: USD
+                      convert_rate: '1'
+                      admin_id: '5'
+                      created_at: '2020-05-01 15:30:25'
+                      updated_at: '2020-05-02 12:25:25'
+                      status: 1
+                      status_text: Approved
+                    - ref: D408798078
+                      shop_id: 8
+                      user_id: 141
+                      source: Paypal
+                      source_infos: 'Paypal ref : JHYTG048967807HRTFD'
+                      currency: USD
+                      amount: '20.00'
+                      fees: '1.00'
+                      funded: '19.00'
+                      funded_currency: USD
+                      convert_rate: '1'
+                      admin_id: '5'
+                      created_at: '2020-05-01 15:30:25'
+                      updated_at: '2020-05-02 12:25:25'
+                      status: 1
+                      status_text: Approved
+                    - ref: D408798078
+                      shop_id: 8
+                      user_id: 141
+                      source: Paypal
+                      source_infos: 'Paypal ref : JHYTG048967807HRTFD'
+                      currency: USD
+                      amount: '20.00'
+                      fees: '1.00'
+                      funded: '19.00'
+                      funded_currency: USD
+                      convert_rate: '1'
+                      admin_id: '5'
+                      created_at: '2020-05-01 15:30:25'
+                      updated_at: '2020-05-02 12:25:25'
+                      status: 1
+                      status_text: Approved
+                    - ref: D408798078
+                      shop_id: 8
+                      user_id: 141
+                      source: Paypal
+                      source_infos: 'Paypal ref : JHYTG048967807HRTFD'
+                      currency: USD
+                      amount: '20.00'
+                      fees: '1.00'
+                      funded: '19.00'
+                      funded_currency: USD
+                      convert_rate: '1'
+                      admin_id: '5'
+                      created_at: '2020-05-01 15:30:25'
+                      updated_at: '2020-05-02 12:25:25'
+                      status: 1
+                      status_text: Approved
+      operationId: get-api-balances-deposits-all
+      description: |-
+        Get list of all deposits made
+
+        /!\ NEED 'balances.deposits.manage' PERMISSIONS WITH THE JWT AUTH PROVIDED /!\
+      security:
+        - JWT Token: []
+      parameters:
+        - schema:
+            type: string
+            example: '8'
+          in: query
+          name: shop_id
+          description: Shop ID
+          required: true
+        - schema:
+            type: string
+            example: h40g8erf4d0807hge80fdsc
+          in: query
+          name: key
+          description: API Key
+          required: true
+    parameters: []
 components:
   schemas: {}
   securitySchemes:
