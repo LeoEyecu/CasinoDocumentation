@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: Balances
+  version: '1.0'
+  description: |-
+    Balances management require 
+
+    /!\ NEED 'users.balance.manage' PERMISSIONS WITH THE JWT AUTH PROVIDED /!\
+  contact:
+    name: Eyecu.Digital
+servers:
+  - url: 'https://games.eyecu.digital'
+    description: EyeCu Games Servers
+paths:
+  '/api/users/{userid}/balance/out':
+    parameters:
+      - schema:
+          type: string
+        name: userid
+        in: path
+        required: true
+        description: User ID of the user you want to remove funds
+    put:
+      summary: ''
+      operationId: put-api-users-userid-balance-out
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Funds added success:
+                  value:
+                    success: true
+        '403':
+          description: |-
+            Forbidden
+
+            Unable to remove funds (permissions issue)
+
+            JWT token user need to have this permission : 'users.balance.manage'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: integer
+                  message:
+                    type: string
+              examples:
+                Unauthorized:
+                  value:
+                    error: 403
+                    message: Unauthorized.
+      description: |-
+        Remove funds to a user balance
+
+        /!\ NEED 'users.balance.manage' PERMISSIONS WITH THE JWT AUTH PROVIDED /!\
+      security:
+        - JWT Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                summ:
+                  type: string
+                  description: 'No ''cents'' format, if you want to add 55.33, you should write : "55.33", not "5533"'
+              required:
+                - summ
+      parameters:
+        - schema:
+            type: string
+            example: '8'
+          in: query
+          name: shop_id
+          required: true
+          description: Shop ID
+        - schema:
+            type: string
+            example: 45Hfz480787fzf708x0z7fz05
+          in: query
+          name: key
+          required: true
+          description: API Key of the Shop
+      tags:
+        - Balances management
+  '/api/users/{userid}/balance/add':
+    parameters:
+      - schema:
+          type: string
+        name: userid
+        in: path
+        required: true
+        description: User ID of the user you want to add funds
+    put:
+      summary: ''
+      operationId: put-api-users-userid-balance-add
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Funds removed success:
+                  value:
+                    success: true
+        '403':
+          description: |-
+            Forbidden
+
+            Unable to add funds (permissions issue)
+
+            JWT token user need to have this permission : 'users.balance.manage'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: integer
+                  message:
+                    type: string
+              examples:
+                Unauthorized:
+                  value:
+                    error: 403
+                    message: Unauthorized.
+      description: |-
+        Add funds to a user balance
+
+        /!\ NEED 'users.balance.manage' PERMISSIONS WITH THE JWT AUTH PROVIDED /!\
+      security:
+        - JWT Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                summ:
+                  type: string
+                  description: 'No ''cents'' format, if you want to remove 55.33, you should write : "55.33", not "5533"'
+              required:
+                - summ
+      parameters:
+        - schema:
+            type: string
+            example: '8'
+          in: query
+          name: shop_id
+          required: true
+          description: Shop ID
+        - schema:
+            type: string
+            example: 45Hfz480787fzf708x0z7fz05
+          in: query
+          name: key
+          required: true
+          description: API Key of the Shop
+      tags:
+        - Balances management
+components:
+  schemas: {}
+  securitySchemes:
+    JWT Token:
+      type: http
+      scheme: bearer
+      description: Provided by /api/login
+tags:
+  - name: Balances management
