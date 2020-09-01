@@ -287,21 +287,8 @@ paths:
           name: key
           description: Your API Key
           required: true
-  /api/me/avatar:
-    put:
-      summary: ''
-      operationId: put-api-me-avatar
-      responses:
-        '200':
-          description: OK
       tags:
         - Session
-    delete:
-      summary: ''
-      operationId: delete-api-me-avatar
-      responses:
-        '200':
-          description: OK
   /me/avatar/external:
     put:
       summary: Your PUT endpoint
@@ -311,11 +298,76 @@ paths:
       operationId: put-me-avatar-external
   /api/me/sessions:
     get:
-      summary: Your GET endpoint
+      summary: Current session(s) of the user
       tags:
         - Session
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Session ID
+                    user_id:
+                      type: integer
+                      description: User ID
+                    ip_address:
+                      type: string
+                      description: IP Address of the user
+                    user_agent:
+                      type: string
+                      description: User agent
+                    browser:
+                      type: string
+                      description: Browser in use by the user
+                    platform:
+                      type: string
+                      description: OS Platform in use by the user
+                    device:
+                      type: string
+                      description: Device Type in use by the user
+                    last_activity:
+                      type: string
+                      description: When is the last activity of the session
+              examples:
+                User have 1 session inc.:
+                  value:
+                    - id: VAQnkTK4VFQYPTbXVvSTrSAlPHXXXXXblfYIkn8RUG
+                      user_id: 67
+                      ip_address: XX.XX.XX.XX
+                      user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) XXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                      browser: Opera
+                      platform: Windows
+                      device: WebKit
+                      last_activity: '2020-08-14 10:29:07'
+                User have no session inc.:
+                  value: []
       operationId: get-api-me-sessions
+      description: |-
+        Get the current session(s) of the user
+
+        It will be populated when a user launch a game
+      security:
+        - JWT Token: []
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: shop_id
+          required: true
+          description: Your Shop ID
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: Your API Key
+          required: true
   /api/me/return:
     get:
       summary: Your GET endpoint
