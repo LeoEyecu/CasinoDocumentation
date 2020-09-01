@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  title: Games.v1
+  version: '1.0'
+  contact:
+    name: Eyecu.Digital
+servers:
+  - url: 'https://games.eyecu.digital'
+    description: EyeCu Games Servers
+paths:
+  /api/category:
+    get:
+      summary: Get categories list
+      responses:
+        '200':
+          description: Success categories list returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 169
+                        title:
+                          type: string
+                          example: New
+                        parent:
+                          type: integer
+                          example: 0
+                        position:
+                          type: integer
+                          example: 1
+                        href:
+                          type: string
+                          example: hot
+                        shop_id:
+                          type: integer
+                          example: 8
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      per_page:
+                        type: integer
+                      last_page:
+                        type: integer
+                      next_page_url:
+                        type: string
+                      prev_page_url:
+                        type: string
+                      from:
+                        type: integer
+                      to:
+                        type: integer
+              examples:
+                Categories list:
+                  value:
+                    data:
+                      - id: 169
+                        title: New
+                        parent: 0
+                        position: 1
+                        href: hot
+                        shop_id: 8
+                    meta:
+                      total: 0
+                      per_page: 0
+                      last_page: 0
+                      next_page_url: string
+                      prev_page_url: string
+                      from: 0
+                      to: 0
+        '401':
+          description: Unauthorized
+      operationId: get-api-categories
+      description: Get list of categories available
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: 'Authorization: Bearer'
+          required: true
+          description: JWT Token of the user
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: API Key of the Shop
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: shop_id
+          description: Shop ID
+          required: true
+      tags:
+        - Global data
+components:
+  schemas: {}
+  securitySchemes:
+    JWT Token:
+      type: http
+      scheme: bearer
+      description: Provided by /api/login
+tags:
+  - name: Global data
