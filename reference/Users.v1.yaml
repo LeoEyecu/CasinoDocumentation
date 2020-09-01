@@ -3,6 +3,8 @@ info:
   title: Users
   version: '1.0'
   description: ''
+  contact:
+    name: Eyecu.Digital
 servers:
   - url: 'https://games.eyecu.digital'
     description: EyeCu Games Servers
@@ -291,11 +293,132 @@ paths:
         - Session
   /me/avatar/external:
     put:
-      summary: Your PUT endpoint
+      summary: Change the user avatar (external url)
       tags:
         - Session
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  first_name:
+                    type:
+                      - string
+                      - 'null'
+                  last_name:
+                    type:
+                      - string
+                      - 'null'
+                  username:
+                    type: string
+                  phone:
+                    type:
+                      - string
+                      - 'null'
+                  balance:
+                    type: string
+                  avatar:
+                    type: string
+                  address:
+                    type:
+                      - string
+                      - 'null'
+                  country_id:
+                    type:
+                      - number
+                      - 'null'
+                  role_id:
+                    type: integer
+                  status:
+                    type: string
+                  birthday:
+                    type:
+                      - string
+                      - 'null'
+                  last_login:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+              examples:
+                User return example:
+                  value:
+                    id: 67
+                    first_name: null
+                    last_name: null
+                    username: '570358550'
+                    phone: null
+                    balance: '90.0000'
+                    avatar: 'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
+                    address: null
+                    country_id: null
+                    role_id: 1
+                    status: Active
+                    birthday: null
+                    last_login: '2020-09-01 10:05:12'
+                    created_at: '2020-08-02 14:21:15'
+                    updated_at: '2020-09-01 10:05:20'
+        '422':
+          description: |-
+            URL Provided is not valid or not porivded
+
+            Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: array
+                    items:
+                      type: string
+              examples:
+                URL Provided is invalid:
+                  value:
+                    url:
+                      - The url format is invalid.
+                URL is not provided:
+                  value:
+                    url:
+                      - The url field is required.
       operationId: put-me-avatar-external
+      description: Change the user avatar URL
+      security:
+        - JWT Token: []
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: shop_id
+          description: Shop ID
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: key
+          required: true
+          description: API Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: It need to be an URL
+              required:
+                - url
+            examples:
+              Avatar update:
+                value:
+                  url: 'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
   /api/me/sessions:
     get:
       summary: Current session(s) of the user
@@ -368,13 +491,789 @@ paths:
           name: key
           description: Your API Key
           required: true
-  /api/me/return:
-    get:
-      summary: Your GET endpoint
+  /api/users:
+    post:
+      summary: Register a new user
       tags:
-        - Session
-      responses: {}
-      operationId: get-api-me-return
+        - User
+      responses:
+        '200':
+          description: User creation success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  username:
+                    type: string
+                  phone:
+                    type: string
+                  balance:
+                    type: string
+                  avatar:
+                    type: string
+                  address:
+                    type: string
+                  country_id:
+                    type: string
+                  role_id:
+                    type: integer
+                  status:
+                    type: string
+                  birthday:
+                    type: string
+                  last_login:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+              examples:
+                User response:
+                  value:
+                    id: 78
+                    first_name: "null"
+                    last_name: "null"
+                    username: '63636363'
+                    phone: "null"
+                    balance: "null"
+                    avatar: 'http://website.com/back/img/profile.png'
+                    address: "null"
+                    country_id: "null"
+                    role_id: 1
+                    status: Active
+                    birthday: "null"
+                    last_login: ''
+                    created_at: '2020-08-04 15:10:11'
+                    updated_at: '2020-08-04 15:10:11'
+        '403':
+          description: |-
+            Forbidden
+
+            When the user permissons not grant "user.manage"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: integer
+                  message:
+                    type: string
+              examples:
+                Forbidden:
+                  value:
+                    error: 403
+                    message: Unauthorized.
+        '422':
+          description: When a username is already taken / when the password not match
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  param_error:
+                    type: array
+                    items:
+                      type: string
+              examples:
+                Username already taken:
+                  value:
+                    username:
+                      - The username has already been taken.
+                Password not match:
+                  value:
+                    password:
+                      - The password confirmation does not match.
+      operationId: post-api-users
+      description: |-
+        Create a new user
+
+        /!\ NEED ['users.manage'] PERMISSIONS WITH THE JWT AUTH PROVIDED /!\
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: 'Authorization: Bearer'
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: API Key of the Shop
+        - schema:
+            type: string
+          in: query
+          name: shop_id
+          description: Shop ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username of the new user
+                password:
+                  type: string
+                  description: Password needed (plain password)
+                password_confirmation:
+                  type: string
+                  description: Password repeat (plain password)
+              required:
+                - username
+                - password
+                - password_confirmation
+        description: User details
+    get:
+      summary: Get list of users
+      tags:
+        - Management
+      responses:
+        '200':
+          description: Users list return
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        first_name:
+                          type: string
+                        last_name:
+                          type: string
+                        username:
+                          type: string
+                        phone:
+                          type: string
+                        balance:
+                          type: string
+                        avatar:
+                          type: string
+                        address:
+                          type: string
+                        country_id:
+                          type: integer
+                        role_id:
+                          type: integer
+                        status:
+                          type: string
+                        birthday:
+                          type: string
+                        last_login:
+                          type: string
+                        created_at:
+                          type: string
+                        updated_at:
+                          type: string
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      per_page:
+                        type: integer
+                      current_page:
+                        type: integer
+                      last_page:
+                        type: integer
+                      next_page_url:
+                        type: string
+                      prev_page_url:
+                        type: string
+                      from:
+                        type: integer
+                      to:
+                        type: integer
+              examples:
+                Users list:
+                  value:
+                    data:
+                      - id: 78
+                        first_name: "null"
+                        last_name: "null"
+                        username: '63636363'
+                        phone: "null"
+                        balance: '55.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-04 15:10:11'
+                        updated_at: '2020-08-04 15:31:59'
+                      - id: 75
+                        first_name: "null"
+                        last_name: "null"
+                        username: '250102198'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:22:14'
+                        updated_at: '2020-08-02 14:22:14'
+                      - id: 76
+                        first_name: "null"
+                        last_name: "null"
+                        username: '433237238'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:22:14'
+                        updated_at: '2020-08-02 14:22:14'
+                      - id: 70
+                        first_name: "null"
+                        last_name: "null"
+                        username: DesignLobbymanager
+                        phone: "null"
+                        balance: '0.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 3
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:22:13'
+                        updated_at: '2020-08-02 14:22:13'
+                      - id: 71
+                        first_name: "null"
+                        last_name: "null"
+                        username: DesignLobbycashier
+                        phone: "null"
+                        balance: '0.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 2
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:22:13'
+                        updated_at: '2020-08-02 14:22:13'
+                      - id: 72
+                        first_name: "null"
+                        last_name: "null"
+                        username: '534086547'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:22:13'
+                        updated_at: '2020-08-02 14:22:13'
+                      - id: 73
+                        first_name: "null"
+                        last_name: "null"
+                        username: '526075622'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:22:13'
+                        updated_at: '2020-08-02 14:22:13'
+                      - id: 74
+                        first_name: "null"
+                        last_name: "null"
+                        username: '581291789'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:22:13'
+                        updated_at: '2020-08-02 14:22:13'
+                      - id: 68
+                        first_name: "null"
+                        last_name: "null"
+                        username: DesignLobbyagent
+                        phone: "null"
+                        balance: '50000.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 5
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:22:12'
+                        updated_at: '2020-08-02 14:22:13'
+                      - id: 69
+                        first_name: "null"
+                        last_name: "null"
+                        username: DesignLobbydistributor
+                        phone: "null"
+                        balance: '40000.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 4
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:22:12'
+                        updated_at: '2020-08-02 14:22:13'
+                      - id: 67
+                        first_name: "null"
+                        last_name: "null"
+                        username: '570358599'
+                        phone: "null"
+                        balance: '199.6500'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: '2020-08-04 13:51:09'
+                        created_at: '2020-08-02 14:21:15'
+                        updated_at: '2020-08-04 13:51:43'
+                      - id: 62
+                        first_name: "null"
+                        last_name: "null"
+                        username: DesignFlamingcashier
+                        phone: "null"
+                        balance: '0.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 2
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:21:14'
+                        updated_at: '2020-08-02 14:21:14'
+                      - id: 64
+                        first_name: "null"
+                        last_name: "null"
+                        username: '335618012'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:21:14'
+                        updated_at: '2020-08-02 14:21:14'
+                      - id: 65
+                        first_name: "null"
+                        last_name: "null"
+                        username: '238354369'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:21:14'
+                        updated_at: '2020-08-02 14:21:14'
+                      - id: 66
+                        first_name: "null"
+                        last_name: "null"
+                        username: '851914394'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:21:14'
+                        updated_at: '2020-08-02 14:21:15'
+                      - id: 63
+                        first_name: "null"
+                        last_name: "null"
+                        username: '324717152'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:21:14'
+                        updated_at: '2020-08-02 14:21:14'
+                      - id: 61
+                        first_name: "null"
+                        last_name: "null"
+                        username: DesignFlamingmanager
+                        phone: "null"
+                        balance: '0.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 3
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:21:14'
+                        updated_at: '2020-08-02 14:21:14'
+                      - id: 60
+                        first_name: "null"
+                        last_name: "null"
+                        username: DesignFlamingdistributor
+                        phone: "null"
+                        balance: '40000.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 4
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:21:13'
+                        updated_at: '2020-08-02 14:21:14'
+                      - id: 58
+                        first_name: "null"
+                        last_name: "null"
+                        username: '420654843'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:20:14'
+                        updated_at: '2020-08-02 14:20:14'
+                      - id: 52
+                        first_name: "null"
+                        last_name: "null"
+                        username: designdefaultmanager
+                        phone: "null"
+                        balance: '0.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 3
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:20:13'
+                        updated_at: '2020-08-02 14:20:13'
+                      - id: 53
+                        first_name: "null"
+                        last_name: "null"
+                        username: designdefaultcashier
+                        phone: "null"
+                        balance: '0.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 2
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:20:13'
+                        updated_at: '2020-08-02 14:20:13'
+                      - id: 54
+                        first_name: "null"
+                        last_name: "null"
+                        username: '362660061'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:20:13'
+                        updated_at: '2020-08-02 14:20:13'
+                      - id: 55
+                        first_name: "null"
+                        last_name: "null"
+                        username: '792104734'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:20:13'
+                        updated_at: '2020-08-02 14:20:13'
+                      - id: 56
+                        first_name: "null"
+                        last_name: "null"
+                        username: '881838063'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:20:13'
+                        updated_at: '2020-08-02 14:20:13'
+                      - id: 57
+                        first_name: "null"
+                        last_name: "null"
+                        username: '339057799'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:20:13'
+                        updated_at: '2020-08-02 14:20:13'
+                      - id: 50
+                        first_name: "null"
+                        last_name: "null"
+                        username: designdefaultagent
+                        phone: "null"
+                        balance: '50000.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 5
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:20:12'
+                        updated_at: '2020-08-02 14:20:13'
+                      - id: 51
+                        first_name: "null"
+                        last_name: "null"
+                        username: designdefaultdistributor
+                        phone: "null"
+                        balance: '40000.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 4
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-08-02 14:20:12'
+                        updated_at: '2020-08-02 14:20:13'
+                      - id: 45
+                        first_name: "null"
+                        last_name: "null"
+                        username: '200426065'
+                        phone: "null"
+                        balance: '89.6000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: '2020-07-24 01:48:19'
+                        created_at: '2020-07-24 01:16:14'
+                        updated_at: '2020-07-24 01:54:47'
+                      - id: 46
+                        first_name: "null"
+                        last_name: "null"
+                        username: '992435092'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-07-24 01:16:14'
+                        updated_at: '2020-07-24 01:16:14'
+                      - id: 47
+                        first_name: "null"
+                        last_name: "null"
+                        username: '950465283'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-07-24 01:16:14'
+                        updated_at: '2020-07-24 01:16:14'
+                      - id: 48
+                        first_name: "null"
+                        last_name: "null"
+                        username: '254462049'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-07-24 01:16:14'
+                        updated_at: '2020-07-24 01:16:14'
+                      - id: 49
+                        first_name: "null"
+                        last_name: "null"
+                        username: '731823647'
+                        phone: "null"
+                        balance: '200.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 1
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-07-24 01:16:14'
+                        updated_at: '2020-07-24 01:16:14'
+                      - id: 41
+                        first_name: "null"
+                        last_name: "null"
+                        username: agent
+                        phone: "null"
+                        balance: '50000.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 5
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-07-24 01:16:13'
+                        updated_at: '2020-07-24 01:16:14'
+                      - id: 42
+                        first_name: "null"
+                        last_name: "null"
+                        username: distributor
+                        phone: "null"
+                        balance: '40000.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 4
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-07-24 01:16:13'
+                        updated_at: '2020-07-24 01:16:14'
+                      - id: 43
+                        first_name: "null"
+                        last_name: "null"
+                        username: manager
+                        phone: "null"
+                        balance: '0.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 3
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-07-24 01:16:13'
+                        updated_at: '2020-07-24 01:16:14'
+                      - id: 44
+                        first_name: "null"
+                        last_name: "null"
+                        username: cashier
+                        phone: "null"
+                        balance: '0.0000'
+                        avatar: 'http://website.com/back/img/profile.png'
+                        address: "null"
+                        country_id: 1
+                        role_id: 2
+                        status: Active
+                        birthday: "null"
+                        last_login: ''
+                        created_at: '2020-07-24 01:16:13'
+                        updated_at: '2020-07-24 01:16:14'
+                    meta:
+                      total: 36
+                      per_page: 20000
+                      current_page: 1
+                      last_page: 1
+                      next_page_url: "null"
+                      prev_page_url: "null"
+                      from: 1
+                      to: 36
+        '401':
+          description: Unauthorized
+      operationId: get-api-users
+      description: |-
+        Get list of users in the shops
+
+        /!\ NEED ['users.manage'] PERMISSIONS WITH THE JWT AUTH PROVIDED /!\
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: 'Authorization: Bearer'
+          description: JWT Token of the user
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: API Key of the Shop
+        - schema:
+            type: string
+          in: query
+          name: shop_id
+          description: Shop ID
 components:
   schemas: {}
   securitySchemes:
