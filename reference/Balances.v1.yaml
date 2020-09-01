@@ -21,7 +21,7 @@ paths:
         required: true
         description: User ID of the user you want to remove funds
     put:
-      summary: ''
+      summary: Remove funds to a user
       operationId: put-api-users-userid-balance-out
       responses:
         '200':
@@ -101,7 +101,7 @@ paths:
         required: true
         description: User ID of the user you want to add funds
     put:
-      summary: ''
+      summary: Add funds to a user
       operationId: put-api-users-userid-balance-add
       responses:
         '200':
