@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Games.v1
+  title: Games
   version: '1.0'
   contact:
     name: Eyecu.Digital
