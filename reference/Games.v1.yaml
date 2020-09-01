@@ -84,12 +84,6 @@ paths:
       parameters:
         - schema:
             type: string
-          in: header
-          name: 'Authorization: Bearer'
-          required: true
-          description: JWT Token of the user
-        - schema:
-            type: string
           in: query
           name: key
           description: API Key of the Shop
@@ -102,6 +96,124 @@ paths:
           required: true
       tags:
         - Global data
+      security:
+        - JWT Token: []
+  /api/games:
+    get:
+      summary: Get games list
+      responses:
+        '200':
+          description: Success games list returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        title:
+                          type: string
+                        category:
+                          type: array
+                          items:
+                            type: string
+                        device:
+                          type: string
+                        denomination:
+                          type: string
+                        view:
+                          type: string
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      per_page:
+                        type: integer
+                      last_page:
+                        type: integer
+                      next_page_url:
+                        type: string
+                      prev_page_url:
+                        type: string
+                      from:
+                        type: integer
+                      to:
+                        type: integer
+        '401':
+          description: Unauthorized
+      operationId: get-api-games
+      description: |-
+        Get list of games available
+
+        This is the list of the available games : https://docs.google.com/spreadsheets/d/11AmYOKU3cY6sVo1hsboj-xVf-1ig2hqNugeDa_yHC6I/edit#gid=0
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: API Key of the Shop
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: shop_id
+          description: Shop ID
+          required: true
+      security:
+        - JWT Token: []
+      tags:
+        - Global data
+  '/launcher/{game}/{token}/{mode}':
+    parameters:
+      - schema:
+          type: string
+          example: CorridaRomanceWD
+        name: game
+        in: path
+        required: true
+        description: Game name
+      - schema:
+          type: string
+          example: Hf4h08gf87e8z70ef8zf7ze89f
+        name: token
+        in: path
+        required: true
+        description: User token (JWT / Seamless token)
+      - schema:
+          type: string
+          example: desktop
+        name: mode
+        in: path
+        required: true
+        description: Game mode (desktop or mobile)
+    get:
+      summary: Start a game session for the user
+      tags: []
+      responses:
+        '307':
+          description: |-
+            Temporary Redirect
+
+            Redirect automaticly to the game
+      operationId: get-launcher-game-token-mode
+      description: |-
+        This is not an API endpoint ! You should redirect the user (or serve it in an iframe) using this syntax.
+
+        https://games.eyecu.digital/launcher/{game}/{token}/{mode}
+
+        Games name = from /api/games => use the 'name' property of the game (not the title)
+
+        Token = From /api/login or if you want to use seamless, check the seamless part for token generation
+
+        Mode = desktop or mobile
 components:
   schemas: {}
   securitySchemes:
