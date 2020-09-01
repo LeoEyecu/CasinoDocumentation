@@ -2,8 +2,10 @@ openapi: 3.0.0
 info:
   title: Users
   version: '1.0'
+  description: ''
 servers:
-  - url: 'http://localhost:3000'
+  - url: 'https://games.eyecu.digital'
+    description: EyeCu Games Servers
 paths:
   /api/login:
     post:
@@ -73,9 +75,7 @@ paths:
     parameters: []
   /api/me:
     get:
-      summary: Get profile information of the user
-      tags:
-        - User
+      summary: Get user information
       responses:
         '200':
           description: User fetch success
@@ -116,17 +116,17 @@ paths:
                 User informations:
                   value:
                     id: 67
-                    first_name: "null"
-                    last_name: "null"
+                    first_name: 'null'
+                    last_name: 'null'
                     username: '570358599'
-                    phone: "null"
+                    phone: 'null'
                     balance: '200.0000'
                     avatar: 'http://website.com/back/img/profile.png'
-                    address: "null"
+                    address: 'null'
                     country_id: 1
                     role_id: 1
                     status: Active
-                    birthday: "null"
+                    birthday: 'null'
                     last_login: ''
                     created_at: '2020-08-02 14:21:15'
                     updated_at: '2020-08-02 14:21:15'
@@ -147,27 +147,146 @@ paths:
           name: shop_id
           description: Shop ID
           required: true
+      tags:
+        - Session
+      security:
+        - JWT Token: []
+    parameters: []
+  /api/me/details/auth:
+    put:
+      summary: Update user credentials
+      operationId: put-api-me-details-auth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  first_name:
+                    type:
+                      - string
+                      - 'null'
+                  last_name:
+                    type:
+                      - string
+                      - 'null'
+                  username:
+                    type: string
+                  phone:
+                    type:
+                      - string
+                      - 'null'
+                  balance:
+                    type: string
+                  avatar:
+                    type: string
+                  address:
+                    type:
+                      - string
+                      - 'null'
+                  country_id:
+                    type:
+                      - number
+                      - 'null'
+                  role_id:
+                    type: integer
+                  status:
+                    type: string
+                  birthday:
+                    type:
+                      - string
+                      - 'null'
+                  last_login:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+              examples:
+                User return example:
+                  value:
+                    id: 67
+                    first_name: null
+                    last_name: null
+                    username: '570358550'
+                    phone: null
+                    balance: '90.0000'
+                    avatar: 'http://website.com/back/img/profile.png'
+                    address: null
+                    country_id: null
+                    role_id: 1
+                    status: Active
+                    birthday: null
+                    last_login: '2020-09-01 10:05:12'
+                    created_at: '2020-08-02 14:21:15'
+                    updated_at: '2020-09-01 10:05:20'
+        '422':
+          description: |-
+            When you want to change the password, but the password conformation not match or 'password_confirmation' not sent in the body (422)
+
+            Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  password:
+                    type: array
+                    items:
+                      type: string
+              examples:
+                Password not match response:
+                  value:
+                    password:
+                      - The password confirmation does not match.
+      description: 'Update user authentication informations (username, password)'
+      security:
+        - JWT Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: 'If you want to change the user username, you can provide this in the body to change it'
+                password:
+                  type: string
+                  description: 'If you want to change the user password, you can add this property to change it (don''t forget to add also ''password_confirmation'')'
+                password_confirmation:
+                  type: string
+                  description: 'If you want to change the password you should also add ''password_confirmation'', it need to confirm the password (in ''password'' property)'
+            examples:
+              Change username:
+                value:
+                  username: test5555
+              Change password:
+                value:
+                  password: dD526oikujhygfvd807
+                  password_confirmation: dD526oikujhygfvd807
+              Change username & password:
+                value:
+                  username: test5555
+                  password: dD526oikujhygfvd807
+                  password_confirmation: dD526oikujhygfvd807
+      parameters:
         - schema:
             type: string
-          in: header
-          name: 'Authorization: Bearer'
+          in: query
+          name: shop_id
+          description: Your Shop ID
           required: true
-          description: User Token (provided by /api/login)
-    parameters: []
-  /api/me/details:
-    get:
-      summary: Your GET endpoint
-      tags:
-        - Session
-      responses: {}
-      operationId: get-api-me-details
-  /api/me/details/auth:
-    get:
-      summary: Your GET endpoint
-      tags:
-        - Session
-      responses: {}
-      operationId: get-api-me-details-auth
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: Your API Key
+          required: true
   /api/me/avatar:
     put:
       summary: ''
@@ -206,5 +325,10 @@ paths:
       operationId: get-api-me-return
 components:
   schemas: {}
+  securitySchemes:
+    JWT Token:
+      type: http
+      scheme: bearer
+      description: Provided by /api/login
 tags:
   - name: Session
