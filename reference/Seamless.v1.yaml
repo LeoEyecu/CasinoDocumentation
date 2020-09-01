@@ -42,27 +42,27 @@ info:
 
     To be able to know the user id needed to play with, the system need to be able to read your token (decrypt it)
 
-    For this, we use 'openssl' for the encryption / decryption with the 'aes-125-ctr' method.
+    For this, we use 'openssl' for the encryption / decryption with the **'aes-125-ctr'** method.
 
-    The IV for this encryption will be pHb33yWGCN4qfX7V, always.
+    The IV for this encryption will be **pHb33yWGCN4qfX7V**, always.
 
     The string required in this token encryption have this format :
 
-    \```json
+    ```json
     user_id="YOUR_USER_ID",time="TIMESTAMP"
-    \```
+    ```
 
 
     Now after we have all these information, we can write our function
 
     (PHP)
 
-    \```php
+    ```php
     $cipher_method = 'aes-128-ctr';
     $crypted_token = openssl_encrypt('user_id=10,time=1598117021', $cipher_method, "YOUR IPN SECRET", 0, 'pHb33yWGCN4qfX7V');
     $seamless_token = base64_encode($crypted_token);
     var_dump($seamless_token);
-    \```
+    ```
 servers:
   - url: 'https://games.eyecu.digital'
     description: EyeCu Games Servers
@@ -240,7 +240,8 @@ paths:
   /event/updateJackpot:
     get:
       summary: updateJackpots
-      tags: []
+      tags:
+        - Events
       responses: {}
       operationId: get-event-updateJackpot
       description: |-
@@ -271,7 +272,7 @@ paths:
         > #### This request also provide some extra parameters (bet, percent, percent_jps, percent_jpg, profit), but all these parameters will be 0, always.
   /event/gameError:
     get:
-      summary: Your GET endpoint
+      summary: gameError
       tags:
         - Events
       responses: {}
