@@ -2,23 +2,181 @@ openapi: 3.0.0
 info:
   title: 1 - Presentation
   version: '1.0'
-  description: |-
-    EyeCu.Digital Games system offer 2 kind of API.
-
-    - A regular one : We manage for you, your users, balances etc on **OUR** system
-
-    - A Seamless API : You manage by yourself your user database, the balance of your user on **YOUR** system - [Click here to see the documentation of the seamless](https://eyecu.stoplight.io/docs/casinodocumentationseamless/reference/1-Seamless.v1.yaml)
   contact:
     name: Eyecu.Digital
 servers:
   - url: 'https://games.eyecu.digital'
-    description: EyeCu.Digital Game Server
+    description: EyeCu Games Servers
 paths:
-  /s:
+  /api/category:
     get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
-      operationId: get-s
+      summary: Get categories list
+      responses:
+        '200':
+          description: Success categories list returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 169
+                        title:
+                          type: string
+                          example: New
+                        parent:
+                          type: integer
+                          example: 0
+                        position:
+                          type: integer
+                          example: 1
+                        href:
+                          type: string
+                          example: hot
+                        shop_id:
+                          type: integer
+                          example: 8
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      per_page:
+                        type: integer
+                      last_page:
+                        type: integer
+                      next_page_url:
+                        type: string
+                      prev_page_url:
+                        type: string
+                      from:
+                        type: integer
+                      to:
+                        type: integer
+              examples:
+                Categories list:
+                  value:
+                    data:
+                      - id: 169
+                        title: New
+                        parent: 0
+                        position: 1
+                        href: hot
+                        shop_id: 8
+                    meta:
+                      total: 0
+                      per_page: 0
+                      last_page: 0
+                      next_page_url: string
+                      prev_page_url: string
+                      from: 0
+                      to: 0
+        '401':
+          description: Unauthorized
+      operationId: get-api-categories
+      description: Get list of categories available
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: API Key of the Shop
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: shop_id
+          description: Shop ID
+          required: true
+      tags:
+        - Global data
+      security:
+        - JWT Token: []
+  /api/games:
+    get:
+      summary: Get games list
+      responses:
+        '200':
+          description: Success games list returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        title:
+                          type: string
+                        category:
+                          type: array
+                          items:
+                            type: string
+                        device:
+                          type: string
+                        denomination:
+                          type: string
+                        view:
+                          type: string
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      per_page:
+                        type: integer
+                      last_page:
+                        type: integer
+                      next_page_url:
+                        type: string
+                      prev_page_url:
+                        type: string
+                      from:
+                        type: integer
+                      to:
+                        type: integer
+        '401':
+          description: Unauthorized
+      operationId: get-api-games
+      description: |-
+        Get list of games available
+
+        This is the list of the available games : https://docs.google.com/spreadsheets/d/11AmYOKU3cY6sVo1hsboj-xVf-1ig2hqNugeDa_yHC6I/edit#gid=0
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: API Key of the Shop
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: shop_id
+          description: Shop ID
+          required: true
+      security:
+        - JWT Token: []
+      tags:
+        - Global data
 components:
   schemas: {}
+  securitySchemes:
+    JWT Token:
+      type: http
+      scheme: bearer
+      description: Provided by /api/login
+tags:
+  - name: Global data
